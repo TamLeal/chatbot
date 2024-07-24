@@ -64,7 +64,7 @@ export default function Chatbot() {
   const fetchOpenAIResponse = async (prompt) => {
     setIsLoading(true);
     try {
-      const response = await fetch('https://my-backend-ag7c.onrender.com/api/chat', { // Atualize esta URL
+      const response = await fetch('https://my-backend-4gaz.onrender.com/api/chat', { // Atualize esta URL
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
