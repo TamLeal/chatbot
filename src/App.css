@@ -1,42 +1,184 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* Estilos gerais */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.App {
+  width: 100%;
+  max-width: 600px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
+  position: relative;
+  z-index: 1;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+/* Remover sobreposição de telas */
+.App:before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #f5f5f5;
+  z-index: -1;
+}
+
+/* Estilos para a entrada da API */
+.api-input {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.api-input input {
+  flex-grow: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-right: 8px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+.api-input .icon {
+  width: 24px;
+  height: 24px;
+  color: #aaa;
+}
+
+.api-input .status {
+  margin-left: 8px;
+}
+
+/* Estilos para a área de resposta */
+.response-area {
+  flex-grow: 1;
+  overflow-y: auto;
+  background: #f9f9f9;
+  padding: 16px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.response-area::-webkit-scrollbar {
+  display: none;  /* Safari and Chrome */
+}
+
+.response-area p {
+  color: #555;
+}
+
+.response-area .message {
+  margin-bottom: 8px;
+}
+
+.response-area .message.ai {
+  color: #000;  /* Cor preta */
+}
+
+
+.response-area .message.user {
+  color: #333;
+}
+
+/* Estilos para as perguntas padrão */
+.default-questions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.default-questions button {
+  flex: 1 1 calc(50% - 8px);
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  color: #aaa;  /* Cor clara */
+}
+
+.default-questions button:hover {
+  background: #f0f0f0;
+}
+
+.default-questions button:disabled {
+  background: #eee;
+  cursor: not-allowed;
+}
+
+/* Estilos para a entrada de mensagem */
+.message-input {
+  display: flex;
+  align-items: center;
+}
+
+.message-input textarea {
+  flex-grow: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  resize: none;
+  height: 40px;  /* Altura fixa */
+  overflow-y: auto;  /* Scroll automático */
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.message-input textarea::-webkit-scrollbar {
+  display: none;  /* Safari and Chrome */
+}
+
+.message-input button {
+  background: none;
+  border: none;
+  margin-left: 8px;
+  cursor: pointer;
+  color: #1a73e8;
+  transition: color 0.3s;
+}
+
+.message-input button:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+.message-input button:hover {
+  color: #0056b3;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+  .App {
+    width: 90%;
+    height: 100vh;
+    padding: 8px;
   }
-  to {
-    transform: rotate(360deg);
+
+  .default-questions button {
+    flex: 1 1 100%;
+    margin-bottom: 8px;
   }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }

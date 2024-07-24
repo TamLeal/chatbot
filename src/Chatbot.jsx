@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, Key, CheckCircle, XCircle } from 'lucide-react';
+import { Send, Key, CheckCircle, XCircle, Square } from 'lucide-react';
 
 const defaultQuestions = [
   "O que é inteligência artificial?",
@@ -15,6 +15,7 @@ export default function Chatbot() {
   const [isFlashing, setIsFlashing] = useState(false);
   const [apiKeyStatus, setApiKeyStatus] = useState(null); // null, 'valid', or 'invalid'
   const [isLoading, setIsLoading] = useState(false);
+  const [typingEffectId, setTypingEffectId] = useState(null); // ID for the typing effect interval
   const responseRef = useRef(null);
   const textareaRef = useRef(null);
   const apiInputRef = useRef(null);
@@ -42,8 +43,11 @@ export default function Chatbot() {
       i++;
       if (i >= message.length) {
         clearInterval(intervalId);
+        setIsLoading(false); // Stop loading when the message is fully displayed
+        setTypingEffectId(null); // Clear the interval ID
       }
     }, 30);
+    setTypingEffectId(intervalId); // Save the interval ID to state
   };
 
   const handleQuestionSubmit = async (question) => {
@@ -82,7 +86,7 @@ export default function Chatbot() {
           'Authorization': `Bearer ${apiKey}`
         },
         body: JSON.stringify({
-          model: "gpt-4o",
+          model: "gpt-4",
           messages: [{ role: "user", content: prompt }],
           max_tokens: 150
         })
@@ -108,8 +112,6 @@ export default function Chatbot() {
       }
       errorMessage += ' Por favor, verifique sua chave API e tente novamente.';
       addMessageWithTypingEffect(errorMessage);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -118,70 +120,64 @@ export default function Chatbot() {
     setApiKeyStatus(null);
   };
 
+  const stopResponse = () => {
+    if (typingEffectId) {
+      clearInterval(typingEffectId);
+      setTypingEffectId(null);
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <div className="flex flex-col h-screen max-w-2xl mx-auto p-4 bg-gray-100">
-      <div className="mb-4 flex items-center">
-        <Key className="w-5 h-5 mr-2 text-gray-500" />
+    <div className="App">
+      <div className="api-input">
+        <Key className="icon" />
         <input
           ref={apiInputRef}
           type="password"
           value={apiKey}
           onChange={handleApiKeyChange}
           placeholder="Insira sua chave da API OpenAI"
-          className={`flex-grow p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 ${
-            isFlashing ? 'animate-flash' : ''
-          }`}
+          className={isFlashing ? 'animate-flash' : ''}
         />
-        {apiKeyStatus === 'valid' && <CheckCircle className="w-5 h-5 ml-2 text-green-500" />}
-        {apiKeyStatus === 'invalid' && <XCircle className="w-5 h-5 ml-2 text-red-500" />}
+        {apiKeyStatus === 'valid' && <CheckCircle className="status valid" />}
+        {apiKeyStatus === 'invalid' && <XCircle className="status invalid" />}
       </div>
-      <div 
-        ref={responseRef}
-        className="flex-grow overflow-auto mb-4 p-4 bg-white rounded-lg shadow"
-      >
+      <div ref={responseRef} className="response-area">
         {conversation.length === 0 ? (
-          <p className="text-gray-500">Selecione uma pergunta abaixo ou digite sua própria pergunta.</p>
+          <p>Selecione uma pergunta abaixo ou digite sua própria pergunta.</p>
         ) : (
           conversation.map((message, index) => (
-            <div key={index} className={`mb-2 ${message.isAI ? 'text-blue-600' : 'text-gray-800'}`}>
+            <div key={index} className={`message ${message.isAI ? 'ai' : 'user'}`}>
               <span className="font-bold">{message.isAI ? 'IA: ' : 'Você: '}</span>
               <span className="whitespace-pre-wrap">{message.text}</span>
             </div>
           ))
         )}
-        {isLoading && <p className="text-gray-500">Carregando resposta...</p>}
       </div>
-      <div className="grid grid-cols-2 gap-2 mb-4">
+      <div className="default-questions">
         {defaultQuestions.map((question, index) => (
           <button
             key={index}
             onClick={() => handleQuestionSubmit(question)}
-            className="p-2 bg-white text-gray-800 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors text-sm text-left"
             disabled={isLoading}
           >
             {question}
           </button>
         ))}
       </div>
-      <form onSubmit={handleManualSubmit} className="flex items-end">
-        <div className="flex-grow relative">
-          <textarea
-            ref={textareaRef}
-            value={manualInput}
-            onChange={(e) => setManualInput(e.target.value)}
-            placeholder="Digite sua pergunta aqui..."
-            className="w-full p-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none overflow-hidden"
-            rows="1"
-            disabled={isLoading}
-          />
-          <button
-            type="submit"
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors"
-            disabled={isLoading}
-          >
-            <Send className="w-5 h-5" />
-          </button>
-        </div>
+      <form onSubmit={handleManualSubmit} className="message-input">
+        <textarea
+          ref={textareaRef}
+          value={manualInput}
+          onChange={(e) => setManualInput(e.target.value)}
+          placeholder="Digite sua pergunta aqui..."
+          rows="1"
+          disabled={isLoading && typingEffectId}
+        />
+        <button type="button" onClick={isLoading ? stopResponse : handleManualSubmit}>
+          {isLoading ? <Square /> : <Send />}
+        </button>
       </form>
     </div>
   );
