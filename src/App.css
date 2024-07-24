@@ -22,35 +22,6 @@ body {
   box-sizing: border-box;
 }
 
-/* Estilos para a entrada da API */
-.api-input {
-  display: flex;
-  align-items: center;
-  margin-bottom: 16px;
-  width: 100%;
-}
-
-.api-input input {
-  flex-grow: 1;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  margin-right: 8px;
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-}
-
-.api-input .icon {
-  width: 24px;
-  height: 24px;
-  color: #aaa;
-  margin-right: 8px;
-}
-
-.api-input .status {
-  margin-left: 8px;
-}
-
 /* Estilos para a área de resposta */
 .response-area {
   flex-grow: 1;
@@ -176,22 +147,6 @@ body {
 
 .message-input button:hover {
   color: #0056b3;
-}
-
-/* Animação de flash para o input da API */
-@keyframes flash {
-  0%, 50%, 100% {
-    border-color: #ef4444;
-    box-shadow: 0 0 0 1px #ef4444;
-  }
-  25%, 75% {
-    border-color: transparent;
-    box-shadow: none;
-  }
-}
-
-.animate-flash {
-  animation: flash 0.5s 3;
 }
 
 /* Responsividade */

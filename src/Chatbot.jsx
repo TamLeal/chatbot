@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, Key, CheckCircle, XCircle, Square } from 'lucide-react';
+import { Send, Square } from 'lucide-react';
 
 const defaultQuestions = [
   "O que é inteligência artificial?",
@@ -11,14 +11,10 @@ const defaultQuestions = [
 export default function Chatbot() {
   const [conversation, setConversation] = useState([]);
   const [manualInput, setManualInput] = useState('');
-  const [apiKey, setApiKey] = useState('');
-  const [isFlashing, setIsFlashing] = useState(false);
-  const [apiKeyStatus, setApiKeyStatus] = useState(null); // null, 'valid', or 'invalid'
   const [isLoading, setIsLoading] = useState(false);
   const [typingEffectId, setTypingEffectId] = useState(null);
   const responseRef = useRef(null);
   const textareaRef = useRef(null);
-  const apiInputRef = useRef(null);
 
   useEffect(() => {
     if (responseRef.current) {
@@ -53,10 +49,6 @@ export default function Chatbot() {
   };
 
   const handleQuestionSubmit = async (question) => {
-    if (!isValidApiKey()) {
-      flashApiInput();
-      return;
-    }
     setConversation(prev => [...prev, { text: question, isAI: false }]);
     await fetchOpenAIResponse(question);
   };
@@ -69,15 +61,6 @@ export default function Chatbot() {
     }
   };
 
-  const isValidApiKey = () => {
-    return apiKey.trim().length > 0;
-  };
-
-  const flashApiInput = () => {
-    setIsFlashing(true);
-    setTimeout(() => setIsFlashing(false), 1500);
-  };
-
   const fetchOpenAIResponse = async (prompt) => {
     setIsLoading(true);
     try {
@@ -85,7 +68,7 @@ export default function Chatbot() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`
+          'Authorization': `Bearer ${process.env.REACT_APP_OPENAI_API_KEY}`
         },
         body: JSON.stringify({
           model: "gpt-4",
@@ -95,31 +78,15 @@ export default function Chatbot() {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error?.message || `HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      setApiKeyStatus('valid');
       const data = await response.json();
-      const aiResponse = data.choices[0].message.content.trim();
-      addMessageWithTypingEffect(aiResponse);
+      addMessageWithTypingEffect(data.choices[0].message.content.trim());
     } catch (error) {
       console.error('Erro ao chamar a API da OpenAI:', error);
-      setApiKeyStatus('invalid');
-      let errorMessage = 'Ocorreu um erro ao processar sua solicitação.';
-      if (error.message.includes('Failed to fetch')) {
-        errorMessage += ' Verifique sua conexão com a internet ou se há um bloqueio de CORS.';
-      } else {
-        errorMessage += ` Erro: ${error.message}`;
-      }
-      errorMessage += ' Por favor, verifique sua chave API e tente novamente.';
-      addMessageWithTypingEffect(errorMessage);
+      addMessageWithTypingEffect("Desculpe, ocorreu um erro ao processar sua solicitação. Por favor, tente novamente mais tarde.");
     }
-  };
-
-  const handleApiKeyChange = (e) => {
-    setApiKey(e.target.value);
-    setApiKeyStatus(null);
   };
 
   const stopResponse = () => {
@@ -132,19 +99,6 @@ export default function Chatbot() {
 
   return (
     <div className="App">
-      <div className="api-input">
-        <Key className="icon" />
-        <input
-          ref={apiInputRef}
-          type="password"
-          value={apiKey}
-          onChange={handleApiKeyChange}
-          placeholder="Insira sua chave da API OpenAI"
-          className={isFlashing ? 'animate-flash' : ''}
-        />
-        {apiKeyStatus === 'valid' && <CheckCircle className="status valid" />}
-        {apiKeyStatus === 'invalid' && <XCircle className="status invalid" />}
-      </div>
       <div ref={responseRef} className="response-area">
         {conversation.map((message, index) => (
           <div key={index} className={`message ${message.isAI ? 'ai' : 'user'}`}>
