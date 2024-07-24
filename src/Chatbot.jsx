@@ -88,7 +88,7 @@ export default function Chatbot() {
           'Authorization': `Bearer ${apiKey}`
         },
         body: JSON.stringify({
-          model: "gpt-4o",
+          model: "gpt-4",
           messages: [{ role: "user", content: prompt }],
           max_tokens: 150
         })
@@ -147,16 +147,16 @@ export default function Chatbot() {
       </div>
       <div ref={responseRef} className="response-area">
         {conversation.map((message, index) => (
-            <div key={index} className={`message ${message.isAI ? 'ai' : 'user'}`}>
-              {message.isAI ? (
-                <>
-                  <span className="emoji">🤖</span>
-                  <span className="message-text">{message.text}</span>
-                </>
-              ) : (
+          <div key={index} className={`message ${message.isAI ? 'ai' : 'user'}`}>
+            {message.isAI ? (
+              <>
+                <span className="emoji">🤖</span>
                 <span className="message-text">{message.text}</span>
-              )}
-            </div>
+              </>
+            ) : (
+              <span className="message-text">{message.text}</span>
+            )}
+          </div>
         ))}
       </div>
       <div className="default-questions">

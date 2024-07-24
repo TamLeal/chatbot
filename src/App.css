@@ -1,39 +1,25 @@
 /* Estilos gerais */
 body {
   font-family: Arial, sans-serif;
-  background-color: #f5f5f5;
+  background-color: #ffffff;
   margin: 0;
   padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .App {
   width: 100%;
   max-width: 600px;
   background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 16px;
   display: flex;
   flex-direction: column;
-  height: 90vh;
+  height: 100vh;
   position: relative;
-  z-index: 1;
-}
-
-/* Remover sobreposição de telas */
-.App:before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #f5f5f5;
-  z-index: -1;
+  box-sizing: border-box;
 }
 
 /* Estilos para a entrada da API */
@@ -41,9 +27,7 @@ body {
   display: flex;
   align-items: center;
   margin-bottom: 16px;
-  width: 70%; /* Ajuste este valor conforme necessário */
-  margin-left: auto;
-  margin-right: auto;
+  width: 100%;
 }
 
 .api-input input {
@@ -54,13 +38,13 @@ body {
   margin-right: 8px;
   font-family: Arial, sans-serif;
   font-size: 14px;
-  width: 100%; /* Garante que o input ocupe todo o espaço disponível */
 }
 
 .api-input .icon {
   width: 24px;
   height: 24px;
   color: #aaa;
+  margin-right: 8px;
 }
 
 .api-input .status {
@@ -75,23 +59,19 @@ body {
   padding: 16px;
   border-radius: 4px;
   margin-bottom: 16px;
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   display: flex;
   flex-direction: column;
 }
 
 .response-area::-webkit-scrollbar {
-  display: none;  /* Safari and Chrome */
-}
-
-.response-area p {
-  color: #555;
+  display: none;
 }
 
 .response-area .message {
   margin-bottom: 8px;
-  max-width: 70%;
+  max-width: 100%;
   padding: 8px;
   border-radius: 8px;
   word-wrap: break-word;
@@ -101,6 +81,7 @@ body {
   background: #fff;
   color: #000;
   align-self: flex-start;
+  width: 100%;
 }
 
 .response-area .message.user {
@@ -119,14 +100,13 @@ body {
 
 /* Estilos para as perguntas padrão */
 .default-questions {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 8px;
   margin-bottom: 16px;
 }
 
 .default-questions button {
-  flex: 1 1 calc(50% - 8px);
   background: #fff;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -136,7 +116,7 @@ body {
   font-family: Arial, sans-serif;
   font-size: 14px;
   font-weight: normal;
-  color: #aaa;  /* Cor clara */
+  color: #333;
 }
 
 .default-questions button:hover {
@@ -152,30 +132,38 @@ body {
 .message-input {
   display: flex;
   align-items: center;
+  position: relative;
+  padding-right: 40px; /* Espaço para o botão */
 }
 
 .message-input textarea {
   flex-grow: 1;
   padding: 8px;
+  padding-right: 40px; /* Espaço para o ícone */
   border: 1px solid #ddd;
   border-radius: 4px;
   resize: none;
-  height: 40px;  /* Altura fixa */
-  overflow-y: auto;  /* Scroll automático */
+  height: 40px;
+  overflow-y: auto;
   font-family: Arial, sans-serif;
   font-size: 14px;
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  width: calc(100% - 40px); /* Ajusta a largura para acomodar o botão */
 }
 
 .message-input textarea::-webkit-scrollbar {
-  display: none;  /* Safari and Chrome */
+  display: none;
 }
 
 .message-input button {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
   background: none;
   border: none;
-  margin-left: 8px;
+  padding: 8px;
   cursor: pointer;
   color: #1a73e8;
   transition: color 0.3s;
@@ -190,16 +178,45 @@ body {
   color: #0056b3;
 }
 
+/* Animação de flash para o input da API */
+@keyframes flash {
+  0%, 50%, 100% {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 1px #ef4444;
+  }
+  25%, 75% {
+    border-color: transparent;
+    box-shadow: none;
+  }
+}
+
+.animate-flash {
+  animation: flash 0.5s 3;
+}
+
 /* Responsividade */
 @media (max-width: 600px) {
   .App {
-    width: 90%;
-    height: 100vh;
     padding: 8px;
   }
 
-  .default-questions button {
-    flex: 1 1 100%;
+  .response-area {
     margin-bottom: 8px;
+  }
+
+  .default-questions {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .message-input {
+    padding-right: 32px; /* Ajuste para telas menores */
+  }
+
+  .message-input textarea {
+    width: calc(100% - 32px); /* Ajuste para telas menores */
+  }
+
+  .message-input button {
+    right: -8px; /* Move o botão um pouco mais para a direita em telas menores */
   }
 }
