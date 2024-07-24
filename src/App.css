@@ -48,11 +48,13 @@ body {
   word-wrap: break-word;
 }
 
+/* Ajuste da margem dos balões de resposta da IA */
 .response-area .message.ai {
   background: #fff;
   color: #000;
   align-self: flex-start;
-  width: 100%;
+  width: calc(100% - 16px); /* Ajusta a largura para incluir a margem */
+  margin-right: auto; /* Recuo da margem direita */
 }
 
 .response-area .message.user {
