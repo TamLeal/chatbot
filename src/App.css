@@ -41,6 +41,9 @@ body {
   display: flex;
   align-items: center;
   margin-bottom: 16px;
+  width: 70%; /* Ajuste este valor conforme necessário */
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .api-input input {
@@ -51,6 +54,7 @@ body {
   margin-right: 8px;
   font-family: Arial, sans-serif;
   font-size: 14px;
+  width: 100%; /* Garante que o input ocupe todo o espaço disponível */
 }
 
 .api-input .icon {

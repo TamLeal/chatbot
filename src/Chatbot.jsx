@@ -88,7 +88,7 @@ export default function Chatbot() {
           'Authorization': `Bearer ${apiKey}`
         },
         body: JSON.stringify({
-          model: "gpt-4",
+          model: "gpt-4o",
           messages: [{ role: "user", content: prompt }],
           max_tokens: 150
         })
@@ -146,10 +146,7 @@ export default function Chatbot() {
         {apiKeyStatus === 'invalid' && <XCircle className="status invalid" />}
       </div>
       <div ref={responseRef} className="response-area">
-        {conversation.length === 0 ? (
-          <p>Selecione uma pergunta abaixo ou digite sua própria pergunta.</p>
-        ) : (
-          conversation.map((message, index) => (
+        {conversation.map((message, index) => (
             <div key={index} className={`message ${message.isAI ? 'ai' : 'user'}`}>
               {message.isAI ? (
                 <>
@@ -160,8 +157,7 @@ export default function Chatbot() {
                 <span className="message-text">{message.text}</span>
               )}
             </div>
-          ))
-        )}
+        ))}
       </div>
       <div className="default-questions">
         {defaultQuestions.map((question, index) => (
