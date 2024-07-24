@@ -149,8 +149,16 @@ export default function Chatbot() {
         ) : (
           conversation.map((message, index) => (
             <div key={index} className={`message ${message.isAI ? 'ai' : 'user'}`}>
-              <span className="font-bold">{message.isAI ? 'IA: ' : 'Você: '}</span>
-              <span className="whitespace-pre-wrap">{message.text}</span>
+              {message.isAI ? (
+                <>
+                  <span className="emoji">🤖</span>
+                  <span className="message-text">{message.text}</span>
+                </>
+              ) : (
+                <>
+                  <span className="message-text">{message.text}</span>
+                </>
+              )}
             </div>
           ))
         )}

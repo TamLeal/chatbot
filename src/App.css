@@ -88,12 +88,23 @@ body {
 }
 
 .response-area .message.ai {
-  color: #000;  /* Cor preta */
+  background: #fff; /* Fundo branco */
+  color: #000; /* Cor preta */
+  text-align: left; /* Alinha o texto à esquerda */
+  border-radius: 8px; /* Bordas arredondadas */
+  padding: 8px; /* Espaçamento interno */
+  margin-right: auto; /* Move a mensagem para a esquerda */
+  max-width: 70%; /* Limita a largura para evitar que ocupe toda a tela */
 }
 
-
 .response-area .message.user {
-  color: #333;
+  background: #e0e0e0; /* Caixa cinza */
+  color: #333; /* Cor do texto */
+  text-align: right; /* Alinha o texto à direita */
+  border-radius: 8px; /* Bordas arredondadas */
+  padding: 8px; /* Espaçamento interno */
+  margin-left: auto; /* Move a mensagem para a direita */
+  max-width: 70%; /* Limita a largura para evitar que ocupe toda a tela */
 }
 
 /* Estilos para as perguntas padrão */
@@ -167,6 +178,12 @@ body {
 
 .message-input button:hover {
   color: #0056b3;
+}
+
+/* Estilos para o emoji de robô */
+.robot-emoji {
+  font-size: 18px; /* Ajusta o tamanho do emoji */
+  margin-right: 4px; /* Espaço entre o emoji e o texto */
 }
 
 /* Responsividade */
