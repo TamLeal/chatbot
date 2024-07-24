@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Send, Square } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 
 const defaultQuestions = [
   "O que é inteligência artificial?",
@@ -63,8 +64,9 @@ export default function Chatbot() {
 
   const fetchOpenAIResponse = async (prompt) => {
     setIsLoading(true);
+    console.log('Sending request to backend:', prompt);
     try {
-      const response = await fetch('https://my-backend-4gaz.onrender.com/api/chat', { // Atualize esta URL
+      const response = await fetch('https://my-backend-4gaz.onrender.com/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -72,11 +74,15 @@ export default function Chatbot() {
         body: JSON.stringify({ prompt: prompt })
       });
 
+      console.log('Received response from backend:', response);
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
+      console.log('Parsed response data:', data);
+
       addMessageWithTypingEffect(data.choices[0].message.content.trim());
     } catch (error) {
       console.error('Erro ao chamar a API da OpenAI:', error);
@@ -100,7 +106,9 @@ export default function Chatbot() {
             {message.isAI ? (
               <>
                 <span className="emoji">🤖</span>
-                <span className="message-text">{message.text}</span>
+                <span className="message-text">
+                  <ReactMarkdown>{message.text}</ReactMarkdown>
+                </span>
               </>
             ) : (
               <span className="message-text">{message.text}</span>
