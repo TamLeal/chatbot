@@ -73,6 +73,8 @@ body {
   margin-bottom: 16px;
   -ms-overflow-style: none;  /* Internet Explorer 10+ */
   scrollbar-width: none;  /* Firefox */
+  display: flex;
+  flex-direction: column;
 }
 
 .response-area::-webkit-scrollbar {
@@ -85,26 +87,30 @@ body {
 
 .response-area .message {
   margin-bottom: 8px;
+  max-width: 70%;
+  padding: 8px;
+  border-radius: 8px;
+  word-wrap: break-word;
 }
 
 .response-area .message.ai {
-  background: #fff; /* Fundo branco */
-  color: #000; /* Cor preta */
-  text-align: left; /* Alinha o texto à esquerda */
-  border-radius: 8px; /* Bordas arredondadas */
-  padding: 8px; /* Espaçamento interno */
-  margin-right: auto; /* Move a mensagem para a esquerda */
-  max-width: 70%; /* Limita a largura para evitar que ocupe toda a tela */
+  background: #fff;
+  color: #000;
+  align-self: flex-start;
 }
 
 .response-area .message.user {
-  background: #e0e0e0; /* Caixa cinza */
-  color: #333; /* Cor do texto */
-  text-align: right; /* Alinha o texto à direita */
-  border-radius: 8px; /* Bordas arredondadas */
-  padding: 8px; /* Espaçamento interno */
-  margin-left: auto; /* Move a mensagem para a direita */
-  max-width: 70%; /* Limita a largura para evitar que ocupe toda a tela */
+  background: #e0e0e0;
+  color: #333;
+  align-self: flex-end;
+}
+
+.message-text {
+  display: inline-block;
+}
+
+.emoji {
+  margin-right: 5px;
 }
 
 /* Estilos para as perguntas padrão */
@@ -178,12 +184,6 @@ body {
 
 .message-input button:hover {
   color: #0056b3;
-}
-
-/* Estilos para o emoji de robô */
-.robot-emoji {
-  font-size: 18px; /* Ajusta o tamanho do emoji */
-  margin-right: 4px; /* Espaço entre o emoji e o texto */
 }
 
 /* Responsividade */

@@ -15,7 +15,7 @@ export default function Chatbot() {
   const [isFlashing, setIsFlashing] = useState(false);
   const [apiKeyStatus, setApiKeyStatus] = useState(null); // null, 'valid', or 'invalid'
   const [isLoading, setIsLoading] = useState(false);
-  const [typingEffectId, setTypingEffectId] = useState(null); // ID for the typing effect interval
+  const [typingEffectId, setTypingEffectId] = useState(null);
   const responseRef = useRef(null);
   const textareaRef = useRef(null);
   const apiInputRef = useRef(null);
@@ -34,20 +34,22 @@ export default function Chatbot() {
   }, [manualInput]);
 
   const addMessageWithTypingEffect = (message, isAI = true) => {
+    setConversation(prev => [...prev, { text: '', isAI }]);
     let i = 0;
     const intervalId = setInterval(() => {
-      setConversation(prev => [
-        ...prev.slice(0, -1),
-        { text: message.slice(0, i + 1), isAI }
-      ]);
+      setConversation(prev => 
+        prev.map((msg, index) => 
+          index === prev.length - 1 ? { ...msg, text: message.slice(0, i + 1) } : msg
+        )
+      );
       i++;
       if (i >= message.length) {
         clearInterval(intervalId);
-        setIsLoading(false); // Stop loading when the message is fully displayed
-        setTypingEffectId(null); // Clear the interval ID
+        setIsLoading(false);
+        setTypingEffectId(null);
       }
     }, 30);
-    setTypingEffectId(intervalId); // Save the interval ID to state
+    setTypingEffectId(intervalId);
   };
 
   const handleQuestionSubmit = async (question) => {
@@ -155,9 +157,7 @@ export default function Chatbot() {
                   <span className="message-text">{message.text}</span>
                 </>
               ) : (
-                <>
-                  <span className="message-text">{message.text}</span>
-                </>
+                <span className="message-text">{message.text}</span>
               )}
             </div>
           ))
